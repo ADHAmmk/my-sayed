@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#102a43">
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'self'"
+    >
+    <title>دفتر البيانات الخاص</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <main id="authScreen" class="auth-screen">
+      <section class="auth-card" aria-labelledby="authTitle">
+        <div class="auth-copy">
+          <div class="brand-mark" aria-hidden="true">د</div>
+          <p class="eyebrow">مساحة خاصة وآمنة</p>
+          <h1 id="authTitle">دفتر البيانات الخاص</h1>
+          <p class="auth-intro">احتفظ ببياناتك المهمة في مكان واحد، مشفّرة على هذا الجهاز.</p>
+
+          <form id="setupForm" class="auth-form" hidden>
+            <h2>إنشاء كلمة المرور الرئيسية</h2>
+            <p class="form-hint">اختر كلمة مرور قوية من 12 حرفًا أو أكثر. لا يمكن استعادة البيانات إذا نسيتها.</p>
+            <label for="setupPassword">كلمة المرور</label>
+            <input id="setupPassword" type="password" minlength="12" autocomplete="new-password" required>
+            <label for="setupPasswordConfirm">تأكيد كلمة المرور</label>
+            <input id="setupPasswordConfirm" type="password" minlength="12" autocomplete="new-password" required>
+            <button class="button button-primary button-wide" type="submit">إنشاء وفتح الدفتر</button>
+          </form>
+
+          <form id="unlockForm" class="auth-form" hidden>
+            <h2>مرحبًا بعودتك</h2>
+            <p class="form-hint">أدخل كلمة المرور الرئيسية لفك تشفير بياناتك.</p>
+            <label for="unlockPassword">كلمة المرور</label>
+            <input id="unlockPassword" type="password" autocomplete="current-password" required>
+            <button class="button button-primary button-wide" type="submit">فتح الدفتر</button>
+          </form>
+          <p id="authMessage" class="message" role="status" aria-live="polite"></p>
+          <p class="security-note">لا تُرسل بياناتك إلى أي خادم. تُحفظ مشفّرة داخل متصفحك.</p>
+        </div>
+        <div class="auth-photo">
+          <img src="assets/family-photo.png" alt="صورة عائلية في حفل تخرج">
+          <div class="photo-caption">
+            <span>ذكريات عزيزة</span>
+            <span>خصوصيتك أولًا</span>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <div id="appScreen" class="app-screen" hidden>
+      <header class="topbar">
+        <a class="wordmark" href="#" aria-label="الصفحة الرئيسية">
+          <span class="brand-mark brand-mark-small" aria-hidden="true">د</span>
+          <span>دفتر البيانات</span>
+        </a>
+        <div class="topbar-actions">
+          <button id="changePasswordButton" class="button button-quiet" type="button">تغيير كلمة المرور</button>
+          <button id="lockButton" class="button button-outline" type="button">قفل الدفتر</button>
+        </div>
+      </header>
+
+      <main class="workspace">
+        <section class="welcome-row">
+          <div>
+            <p class="eyebrow">لوحة التحكم</p>
+            <h1>بياناتك المهمة، في مكان واحد</h1>
+            <p class="muted">اختر أحد الأقسام لعرض سجلاته وإدارتها.</p>
+          </div>
+          <div class="secure-chip"><span aria-hidden="true">●</span> التخزين مشفّر محليًا</div>
+        </section>
+
+        <nav id="categoryNav" class="category-grid" aria-label="أقسام الدفتر"></nav>
+
+        <section class="records-panel" aria-labelledby="sectionTitle">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">السجلات</p>
+              <h2 id="sectionTitle"></h2>
+            </div>
+            <button id="addRecordButton" class="button button-primary" type="button">
+              <span aria-hidden="true">＋</span> إضافة سجل
+            </button>
+          </div>
+          <div class="table-toolbar">
+            <label class="search-box">
+              <span class="visually-hidden">البحث في السجلات</span>
+              <span aria-hidden="true">⌕</span>
+              <input id="searchInput" type="search" placeholder="ابحث في هذا القسم…" autocomplete="off">
+            </label>
+            <span id="recordCount" class="record-count"></span>
+          </div>
+          <p id="appMessage" class="message app-message" role="status" aria-live="polite"></p>
+          <div class="table-wrap">
+            <table>
+              <thead id="tableHead"></thead>
+              <tbody id="tableBody"></tbody>
+            </table>
+            <div id="emptyState" class="empty-state" hidden>
+              <span class="empty-icon" aria-hidden="true">▤</span>
+              <h3>لا توجد سجلات بعد</h3>
+              <p>أضف أول سجل إلى هذا القسم للبدء.</p>
+            </div>
+          </div>
+        </section>
+      </main>
+      <footer class="footer-note">تذكير: امسح بيانات المتصفح أو تغيير الجهاز قد يؤدي إلى فقدان السجلات المشفّرة.</footer>
+    </div>
+
+    <dialog id="recordDialog" class="dialog">
+      <form id="recordForm" class="dialog-form">
+        <div class="dialog-heading">
+          <div>
+            <p class="eyebrow">إدارة السجلات</p>
+            <h2 id="recordDialogTitle">إضافة سجل</h2>
+          </div>
+          <button class="icon-button" type="button" data-close="recordDialog" aria-label="إغلاق">×</button>
+        </div>
+        <div id="recordFields" class="form-grid"></div>
+        <div class="dialog-actions">
+          <button class="button button-outline" type="button" data-close="recordDialog">إلغاء</button>
+          <button class="button button-primary" type="submit">حفظ السجل</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog id="passwordDialog" class="dialog dialog-narrow">
+      <form id="passwordForm" class="dialog-form">
+        <div class="dialog-heading">
+          <div>
+            <p class="eyebrow">إعدادات الأمان</p>
+            <h2>تغيير كلمة المرور</h2>
+          </div>
+          <button class="icon-button" type="button" data-close="passwordDialog" aria-label="إغلاق">×</button>
+        </div>
+        <p class="form-hint">سيعاد تشفير كل البيانات بكلمة المرور الجديدة. يلزم إدخال كلمة المرور الحالية.</p>
+        <label for="currentPassword">كلمة المرور الحالية</label>
+        <input id="currentPassword" type="password" autocomplete="current-password" required>
+        <label for="newPassword">كلمة المرور الجديدة</label>
+        <input id="newPassword" type="password" minlength="12" autocomplete="new-password" required>
+        <label for="newPasswordConfirm">تأكيد كلمة المرور الجديدة</label>
+        <input id="newPasswordConfirm" type="password" minlength="12" autocomplete="new-password" required>
+        <p id="passwordMessage" class="message" role="status" aria-live="polite"></p>
+        <div class="dialog-actions">
+          <button class="button button-outline" type="button" data-close="passwordDialog">إلغاء</button>
+          <button class="button button-primary" type="submit">حفظ كلمة المرور</button>
+        </div>
+      </form>
+    </dialog>
+  </body>
+</html>
