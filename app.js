@@ -17,8 +17,7 @@ const categories = [
       { key: "mobile", label: "المحمول", inputMode: "tel" },
       { key: "hospital", label: "المستشفى" },
       { key: "clinic", label: "العيادة" },
-      { key: "condition", label: "مرض المصاب به" },
-      { key: "password", label: "كلمة السر", kind: "password" },
+      { key: "condition", label: "الوصف" },
       { key: "notes", label: "ملاحظات", kind: "textarea", wide: true }
     ]
   },
