@@ -576,4 +576,10 @@ document.querySelectorAll("[data-close]").forEach((button) => {
   button.addEventListener("click", () => document.getElementById(button.dataset.close).close());
 });
 
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./sw.js").catch(() => {});
+  });
+}
+
 showAuth();
